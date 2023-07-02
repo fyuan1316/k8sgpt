@@ -62,7 +62,7 @@ func (c *AzureAIClient) GetCompletion(ctx context.Context, prompt string, prompt
 	return resp.Choices[0].Message.Content, nil
 }
 
-func (a *AzureAIClient) Parse(ctx context.Context, prompt []string, cache cache.ICache, promptTmpl string) (string, error) {
+func (a *AzureAIClient) Parse(ctx AnalyeContext, prompt []string, cache cache.ICache, promptTmpl string) (string, error) {
 	inputKey := strings.Join(prompt, " ")
 	// Check for cached data
 	cacheKey := util.GetCacheKey(a.GetName(), a.language, inputKey)

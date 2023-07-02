@@ -25,6 +25,8 @@ import (
 	v1 "k8s.io/api/core/v1"
 	networkv1 "k8s.io/api/networking/v1"
 	policyv1 "k8s.io/api/policy/v1"
+
+	asmoperatorv1alpha1 "gomod.alauda.cn/asm/api/operator/v1alpha1"
 )
 
 type IAnalyzer interface {
@@ -56,6 +58,8 @@ type PreAnalysis struct {
 	Node                     v1.Node
 	// Integrations
 	TrivyVulnerabilityReport trivy.VulnerabilityReport
+
+	ServiceMesh *asmoperatorv1alpha1.ServiceMesh
 }
 
 type Result struct {
@@ -64,6 +68,8 @@ type Result struct {
 	Error        []Failure `json:"error"`
 	Details      string    `json:"details"`
 	ParentObject string    `json:"parentObject"`
+
+	Subject string `json:"subject"`
 }
 
 type Failure struct {

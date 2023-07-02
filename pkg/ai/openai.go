@@ -26,6 +26,7 @@ import (
 	"github.com/sashabaranov/go-openai"
 
 	"github.com/fatih/color"
+	"github.com/fyuan1316/kb-client"
 )
 
 type OpenAIClient struct {
@@ -73,7 +74,7 @@ func (c *OpenAIClient) GetCompletion(ctx context.Context, prompt string, promptT
 	return resp.Choices[0].Message.Content, nil
 }
 
-func (a *OpenAIClient) Parse(ctx context.Context, prompt []string, cache cache.ICache, promptTmpl string) (string, error) {
+func (a *OpenAIClient) Parse(ctx AnalyeContext, prompt []string, cache cache.ICache, promptTmpl string) (string, error) {
 	inputKey := strings.Join(prompt, " ")
 	// Check for cached data
 	cacheKey := util.GetCacheKey(a.GetName(), a.language, inputKey)
@@ -94,19 +95,39 @@ func (a *OpenAIClient) Parse(ctx context.Context, prompt []string, cache cache.I
 		}
 	}
 
-	response, err := a.GetCompletion(ctx, inputKey, promptTmpl)
+	//ask KB fy
+	var allResult []string
+	clt := kb_client.NewVecClient()
+	kbResp, err := kb_client.GetAnswer(kb_client.EmbedContext{
+		Ctx:     ctx.Context,
+		Subject: ctx.Subject,
+	}, clt, prompt)
 	if err != nil {
+		color.Red("error ask KB: %v", err)
 		return "", err
 	}
+	if kbResp != "" {
+		allResult = append(allResult, fmt.Sprintf("KB result:\n %v", kbResp))
+	} else {
+		allResult = append(allResult, fmt.Sprintf("KB result: 0 found\n"))
+	}
+	// maybe ask gpt optional ?
+	//response, err := a.GetCompletion(ctx, inputKey, promptTmpl)
+	//if err != nil {
+	//	return flatResult(allResult), err
+	//}
+	//allResult = append(allResult, fmt.Sprintf("GPT result: %v", response))
 
+	response := flatResult(allResult)
 	err = cache.Store(cacheKey, base64.StdEncoding.EncodeToString([]byte(response)))
-
 	if err != nil {
 		color.Red("error storing value to cache: %v", err)
 		return "", nil
 	}
-
 	return response, nil
+}
+func flatResult(s []string) string {
+	return strings.Join(s, " \n ")
 }
 
 func (a *OpenAIClient) GetName() string {

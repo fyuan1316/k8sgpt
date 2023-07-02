@@ -27,11 +27,17 @@ require (
 	buf.build/gen/go/k8sgpt-ai/k8sgpt/grpc/go v1.3.0-20230620082254-6f80f9533908.1
 	buf.build/gen/go/k8sgpt-ai/k8sgpt/protocolbuffers/go v1.30.0-20230620082254-6f80f9533908.1
 	github.com/aws/aws-sdk-go v1.44.292
+	github.com/mitchellh/go-homedir v1.1.0
+	gomod.alauda.cn/asm/api v0.0.0-20230628070224-898f0475ccb7
+	sigs.k8s.io/controller-runtime v0.15.0
 )
 
 require (
 	github.com/anchore/go-struct-converter v0.0.0-20221118182256-c68fdcfa2092 // indirect
+	github.com/evanphx/json-patch/v5 v5.6.0 // indirect
+	github.com/fyuan1316/kb-client v0.0.0-20230702122312-4b19adc24ef6 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/qdrant/go-client v1.3.0 // indirect
 )
 
 require (

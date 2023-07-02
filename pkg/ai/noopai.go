@@ -44,7 +44,7 @@ func (c *NoOpAIClient) GetCompletion(ctx context.Context, prompt string, promptT
 	return response, nil
 }
 
-func (a *NoOpAIClient) Parse(ctx context.Context, prompt []string, cache cache.ICache, promptTmpl string) (string, error) {
+func (a *NoOpAIClient) Parse(ctx AnalyeContext, prompt []string, cache cache.ICache, promptTmpl string) (string, error) {
 	// parse the text with the AI backend
 	inputKey := strings.Join(prompt, " ")
 	// Check for cached data

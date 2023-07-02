@@ -268,7 +268,11 @@ func (a *Analysis) GetAIResults(output string, anonymize bool) error {
 		} else {
 			promptTemplate = ai.PromptMap["default"]
 		}
-		parsedText, err := a.AIClient.Parse(a.Context, texts, a.Cache, promptTemplate)
+
+		parsedText, err := a.AIClient.Parse(ai.AnalyeContext{
+			Context: a.Context,
+			Subject: a.Results[0].Subject,
+		}, texts, a.Cache, promptTemplate)
 		if err != nil {
 			// FIXME: can we avoid checking if output is json multiple times?
 			//   maybe implement the progress bar better?
